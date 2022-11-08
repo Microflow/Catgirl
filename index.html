@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <style>
+*, html, body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+*, *::after, *::before {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  background: #090909;
+  /* Work for 300/hour etc */
+  font: 40px/1 "Josefin Sans", sans-serif;
+  color: #090909;
+  letter-spacing: -4px;
+  line-height: -30px !important;
+}
+
+.scroll {
+  position: relative;
+  z-index: 1;
+}
+
+.move-right {
+  position: relative;
+  margin-left: 100px;
+}
+
+.content {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  will-change: transform;
+}
+
+.main-link {
+  text-decoration: none;
+  color: #eee;
+  font-size: 5rem;
+}
+
+.main-link:hover {
+  color: #aaa;
+}
+
+.hero {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.hero_title {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  display: flex;
+}
+.hero_title span {
+  overflow: hidden;
+  display: inline-block;
+}
+.hero_title span span {
+  display: block;
+  padding: 0.125rem;
+}
+.hero_title span:nth-of-type(1) span {
+  transform: translateX(100%) translateZ(0) skewX(50deg);
+}
+.hero_title span:nth-of-type(2) span {
+  transform: translateY(-100%) translateZ(0);
+}
+.hero_title span:nth-of-type(3) span {
+  transform: translateX(-100%) translateZ(0) skewX(50deg);
+  font-family: "Josefin Sans", serif;
+}
+.hero_title span:nth-of-type(4) span {
+  transform: translateX(100%) translateZ(0) skewX(50deg);
+  font-family: "Josefin Sans", serif;
+}
+.hero_title span:nth-of-type(5) span {
+  transform: translateY(100%) translateZ(0);
+}
+.hero_title span:nth-of-type(6) span {
+  transform: translateX(-100%) translateZ(0) skewX(50deg);
+  font-family: "Josefin Sans", serif;
+}
+.hero_title h1 {
+  margin: auto;
+  text-align: center;
+  font-weight: normal;
+  font-size: 4rem;
+  color: #fff;
+}
+.hero_title h1.active span span {
+  transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: none;
+}
+.hero_border {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  left: -1px;
+  bottom: -1px;
+  z-index: 3;
+  border-width: 0;
+  border-style: solid;
+  border-color: #fff;
+}
+.hero_image {
+  position: relative;
+  z-index: 1;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.hero_arrow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 2;
+  width: 1px;
+  height: 100px;
+  transform: translateY(-50%) translateZ(0);
+  overflow: hidden;
+  backface-visibility: hidden;
+  animation: HerosArrowTransition 3.5s infinite;
+}
+.hero_arrow div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 90px;
+  width: 1px;
+  background: #fff;
+  transform: translateY(-100px);
+  animation: HerosLineTransition 3.5s infinite;
+}
+
+.intro {
+  height: 100vh;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #0b0b0b;
+  text-align: center;
+  color: #fefefe;
+}
+.intro_title {
+  /*Large Writing in second section */
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  line-height: -65;
+  position: relative;
+  margin-top: 200px;
+  font-weight: normal;
+  font-size: 4.9rem;
+}
+.intro_title span {
+  overflow: hidden;
+  display: inline-block;
+  padding: 0.5rem;
+}
+.intro_title span:nth-of-type(1) {
+  transform: translateX(-150%) translateZ(0) skewX(50deg);
+  font-style: italic;
+}
+.intro_title span:nth-of-type(2) {
+  transform: translateY(-200%) translateZ(0);
+  font-family: "Josefin Sans", serif;
+  font-size: 5rem;
+}
+.intro_title span:nth-of-type(3) {
+  transform: translateY(200%) translateZ(0);
+  font-family: "Josefin Sans", serif;
+}
+.intro_title span:nth-of-type(4) {
+  transform: translateX(150%) translateZ(0) skewX(-50deg);
+}
+.intro_title.active span {
+  transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: none;
+}
+.intro_text {
+  position: relative;
+  z-index: 2;
+  max-width: 450px;
+  width: 100%;
+  margin: 1rem auto 0;
+  line-height: 1.8;
+  text-align: center;
+}
+.intro_text span {
+  overflow: hidden;
+  display: block;
+}
+.intro_text span span {
+  transform: translateY(150%);
+}
+.intro_text.active span span {
+  transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: none;
+}
+.intro_text.active span:nth-of-type(2) span {
+  transition-delay: 0.15s;
+}
+.intro_text.active span:nth-of-type(3) span {
+  transition-delay: 0.3s;
+}
+.intro_figures {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.intro_figure-1 {
+  width: 203px;
+  height: 256px;
+  position: absolute;
+  left: -460px;
+  top: -160px;
+  z-index: 2;
+}
+.intro_figure-2 {
+  width: 360px;
+  height: 200px;
+  position: absolute;
+  left: -600px;
+  top: -60px;
+  z-index: 1;
+}
+.intro_figure-3 {
+  width: 170px;
+  height: 215px;
+  position: absolute;
+  left: 240px;
+  top: -50px;
+  z-index: 2;
+}
+.intro_figure-4 {
+  width: 320px;
+  height: 220px;
+  position: absolute;
+  left: 260px;
+  top: -340px;
+  z-index: 1;
+}
+.intro_image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.layer {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.layer img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1) 0s, transform 1s cubic-bezier(0.19, 1, 0.22, 1) 0s;
+  transform: scale(0.5);
+  opacity: 0;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.layer img:nth-of-type(1) {
+  margin: -139px 0 0px 125px;
+}
+.layer img:nth-of-type(2) {
+  margin: -74px 0 0 -145px;
+}
+.layer img:nth-of-type(3) {
+  margin: -5px 0 0 167px;
+}
+.layer p {
+  position: absolute;
+  left: 50%;
+  width: 750px;
+  margin-left: -350px;
+  font-size: 3rem;
+  color: #eee;
+}
+.layer span:nth-of-type(1) {
+  font-style: italic;
+}
+.layer span:nth-of-type(2) {
+  font-family: "Josefin Sans", serif;
+}
+.layer span:nth-of-type(3) {
+  font-family: "Josefin Sans", serif;
+  font-style: italic;
+}
+.layer span:nth-of-type(4) {
+  font-family: "Josefin Sans", serif;
+}
+.layer span:nth-of-type(5) {
+  font-style: italic;
+}
+.layer span:nth-of-type(6) {
+  font-family: "Josefin Sans", serif;
+}
+.layer span:nth-of-type(7) {
+  font-family: "Josefin Sans", serif;
+  font-style: italic;
+  color: #eee;
+}
+.layer em {
+  width: 20px;
+  height: 1px;
+  display: inline-block;
+  transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.layer video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -o-object-fit: cover;
+  object-position: center;
+}
+.layer_title {
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background-color: #0a0a0a;
+  mix-blend-mode: screen;
+}
+.layer.active em {
+  width: 100px;
+}
+.layer.active em:nth-of-type(2) {
+  transition-delay: 0.2s, 0.2s;
+}
+.layer.active em:nth-of-type(3) {
+  transition-delay: 0.3s, 0.3s;
+}
+.layer.active img {
+  transform: scale(1);
+  opacity: 1;
+}
+.layer.active img:nth-of-type(1) {
+  transition-delay: 0.1s, 0.1s;
+}
+.layer.active img:nth-of-type(2) {
+  transition-delay: 0.2s, 0.2s;
+}
+.layer.active img:nth-of-type(3) {
+  transition-delay: 0.3s, 0.3s;
+}
+
+.slider {
+  height: 100vh;
+  margin-bottom: 200vw;
+  position: relative;
+  z-index: 2;
+  background-color: #0a0a0a;
+}
+.slider_title {
+  width: 100vw;
+  position: absolute;
+  top: 50vh;
+  left: 0;
+  z-index: 2;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 5rem;
+  color: #fff;
+}
+.slider_title span:nth-of-type(1) {
+  font-style: italic;
+}
+.slider_title span:nth-of-type(2) {
+  font-family: "Editorial New", serif;
+}
+.slider_inner {
+  width: 300vw;
+  height: 75vh;
+  position: absolute;
+  top: 12.5vh;
+  left: 0;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background-color: #0a0a0a;
+  font-size: 0;
+}
+.slider_slide {
+  position: relative;
+  z-index: 1;
+  width: calc((100% / 6) - 2rem);
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 1rem;
+  font-size: 3rem;
+}
+.slider_slide img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.outro {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.outro_list {
+  list-style-type: none;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+.outro_list li {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  font-size: 4rem;
+  cursor: pointer;
+}
+.outro_list li:hover span {
+  transform: translateY(-100%);
+}
+.outro_list span {
+  display: inline-block;
+  position: relative;
+  line-height: 1.4;
+  color: #000;
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.outro_list span:nth-child(2) {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+.outro .text-1 {
+  font-style: italic;
+  color: #bbb;
+  letter-spacing: -2px;
+}
+.outro .text-2 {
+  font-family: "Josefin Sans", serif;
+  font-style: normal;
+  color: #bbb;
+  letter-spacing: -10px;
+}
+.outro .text-3 {
+  font-family: "Josefin Sans", serif;
+  letter-spacing: -14px;
+}
+.outro_medias {
+  width: 270px;
+  height: 300px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.outro_medias img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 0;
+  -o-object-fit: cover;
+  object-fit: cover;
+  transition: opacity 2s cubic-bezier(0.19, 1, 0.22, 1) 1s;
+}
+.outro_medias img.active {
+  transition-delay: 0s;
+  z-index: 2;
+  opacity: 1;
+}
+.outro:hover .outro_medias {
+  opacity: 1;
+}
+
+@keyframes HerosArrowTransition {
+  0% {
+    transform: translateY(-50%) translateZ(0);
+  }
+  35% {
+    transform: translateY(0%) translateZ(0);
+  }
+  36% {
+    transform: translateY(0%) translateZ(0);
+  }
+  71% {
+    transform: translateY(50%) translateZ(0);
+  }
+  100% {
+    transform: translateY(50%) translateZ(0);
+  }
+}
+@keyframes HerosLineTransition {
+  0% {
+    transform: translateY(-100px) translateZ(0);
+  }
+  35% {
+    transform: translateY(0) translateZ(0);
+  }
+  36% {
+    transform: translateY(0) translateZ(0);
+  }
+  71% {
+    transform: translateY(100px) translateZ(0);
+  }
+  100% {
+    transform: translateY(100px) translateZ(0);
+  }
+}
+  </style>
+    
+</head>
+    
+  <body>
+<div id="main">
+      <div class="content" data-content>
+        <div class="hero" data-hero>
+          <div class="hero_title">
+            <h1 data-hero-title>
+              <span><span>Learn</span></span> <span><span></span></span> <span><span></span></span><br><span><span></span></span> <span><span>Mandarin</span></span> <span><span></span></span>
+            </h1>
+          </div>
+          
+
+          
+          
+          
+          <div class="hero_border" data-hero-border></div>
+          <img class="hero_image" width="50%" height="100%" src="https://assets.codepen.io/577362/Hipster+Girl+-+Taiwanese+-+Beautiful+TikTok" data-src="" alt="" data-hero-image />
+          <div class="hero_arrow">
+            <div></div>
+          </div>
+        </div>
+        
+        
+        
+        
+        <div class="intro" data-intro>
+          <h2 class="intro_title" data-intro-title>
+            <span>Jobs</span> <span></span><br><span></span> <span></span>
+          </h2>
+          <p class="intro_text" data-intro-text>
+              <span>300  / hour<span></span></span><br><span><span></span></span><br><span><span></span></span>
+          </p>
+          
+          
+          
+          
+          <div class="intro_figures">
+            <div class="intro_figure-1" data-intro-figure="1">
+              <img class="intro_image" width="612" height="459" src="https://assets.codepen.io/577362/Hipster+Girl+-+Taiwanese+-+Beautiful+TikTok" data-src="https://assets.codepen.io/577362/Hipster+Girl+-+Taiwanese+-+Beautiful+TikTok" alt="" />
+            </div>
+            <div class="intro_figure-2" data-intro-figure="2">
+                <img class="intro_image" width="612" height="459" src="https://assets.codepen.io/577362/Hipster+Girl+-+Taiwanese+-+Beautiful+TikTok" data-src="https://assets.codepen.io/577362/Hipster+Girl+-+Taiwanese+-+Beautiful+TikTok" alt="" />
+            </div>
+            
+            
+            <div class="intro_figure-3" data-intro-figure="3">
+              <img class="intro_image" width="612" height="340" src="https://assets.codepen.io/577362/Hipster+Girl+-+Taiwanese+-+Beautiful+TikTok" data-src="https://media.istockphoto.com/photos/close-up-beautiful-fashion-model-posing-against-white-background-picture-id920743316?k=20&m=920743316&s=612x612&w=0&h=tykJCdLWC_MCgNUyLusxmZYIr_LMjO7JeM4Kp1kMnQM=" alt="" />
+            </div>
+            <div class="intro_figure-4" data-intro-figure="4">
+                <img class="intro_image" width="612" height="408" src="https://media.istockphoto.com/photos/beautiful-happy-woman-showing-love-sign-picture-id1094133836?k=20&m=1094133836&s=612x612&w=0&h=_2dj8Buc0G_BcbncgoKFiXulDZ9HGbJg93Z7vBt6VoM=" data-src="https://media.istockphoto.com/photos/beautiful-happy-woman-showing-love-sign-picture-id1094133836?k=20&m=1094133836&s=612x612&w=0&h=_2dj8Buc0G_BcbncgoKFiXulDZ9HGbJg93Z7vBt6VoM=" alt="" />
+            </div>
+          </div>
+        </div>
+        <div class="layer" data-layer>
+          <div class="layer_title">
+            <p data-layer-text><span></span> <em></em><span></span><br><span><em></em></span> 
+              <a class="main-link" title="planttrees" target="_blank" href="https://www.tiktok.com/tag/planttrees">Learn Chinese</a> 
+              <br><br><a class="main-link" title="tree" target="_blank" href="https://www.tiktok.com/tag/tree">Raise Money </a>
+               
+              
+              <span><br> </span> <span></span> <span></span><em></em> <span></span></p>
+          </div>
+          <img width="612" height="459" src="https://assets.codepen.io/577362/Patreon-Logo.webp" data-src="https://assets.codepen.io/577362/Patreon-Logo.webp" alt="" />
+        <!-- HIDE ZECZEC  <img width="199" src="https://assets.codepen.io/577362/zeczec.png" alt="" />" data-src="https://assets.codepen.io/577362/zeczec.png" alt="" />" alt="" /> -->
+
+
+<!--           <img width="612" height="459" src="https://media.istockphoto.com/photos/portrait-of-a-beautiful-young-woman-posing-against-a-brown-background-picture-id1324035745?k=20&m=1324035745&s=612x612&w=0&h=68QT5DIMLRXEcC1aZUzAZWBI79KtCbgcTGHiObooSfo=" data-src="" alt="" /> -->
+          <video playsinline autoplay muted loop>
+            <source src="https://assets.codepen.io/577362/MoonInForest.mp4" type="video/mp4">
+            <source src="http://thenewcode.com/assets/videos/fashion.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="slider" data-slider>
+          <div class="slider_title"><span>Patreon</span> <span>ZecZec</span></div>
+          <div class="slider_inner" data-slider-inner>
+            <div class="slider_slide" data-slider-slide><img width="612" height="459" src="https://media.istockphoto.com/photos/studio-shot-of-young-beautiful-woman-picture-id483152629?k=20&m=483152629&s=612x612&w=0&h=sCPMAdHFyQ4UYfXdPzla0UYPzQ1ZPlHBxtYbgvdBOjg=" data-src="https://media.istockphoto.com/photos/studio-shot-of-young-beautiful-woman-picture-id483152629?k=20&m=483152629&s=612x612&w=0&h=sCPMAdHFyQ4UYfXdPzla0UYPzQ1ZPlHBxtYbgvdBOjg=" alt="" /></div>
+            <div class="slider_slide" data-slider-slide><img width="612" height="408" src="https://media.istockphoto.com/photos/portrait-of-a-young-woman-with-a-beautiful-smile-picture-id1011490142?k=20&m=1011490142&s=612x612&w=0&h=MStrV0UIydBmyGeVvnWyXbwvg2GRo8cfmtmh2RvndSI=" data-src="https://media.istockphoto.com/photos/portrait-of-a-young-woman-with-a-beautiful-smile-picture-id1011490142?k=20&m=1011490142&s=612x612&w=0&h=MStrV0UIydBmyGeVvnWyXbwvg2GRo8cfmtmh2RvndSI=" alt="" /></div>
+            <div class="slider_slide" data-slider-slide><img width="509" height="339" src="https://media.istockphoto.com/photos/pretty-girl-smiling-into-the-camera-beautiful-woman-with-smile-happy-picture-id1145034580?k=20&m=1145034580&s=612x612&w=0&h=n4hCdrK7XCs9DMkruL7jbkQs26gFDRzKbeAMJAAtpcg=" data-src="https://media.istockphoto.com/photos/pretty-girl-smiling-into-the-camera-beautiful-woman-with-smile-happy-picture-id1145034580?k=20&m=1145034580&s=612x612&w=0&h=n4hCdrK7XCs9DMkruL7jbkQs26gFDRzKbeAMJAAtpcg=" alt="" /></div>
+            <div class="slider_slide" data-slider-slide><img width="509" height="339" src="https://media.istockphoto.com/photos/beautiful-young-girl-picture-id140152273?k=20&m=140152273&s=612x612&w=0&h=f4iGjK6LQyC5s76D3sXSzRoOTOimK_XII_S0qnLWEgg=" data-src="https://media.istockphoto.com/photos/beautiful-young-girl-picture-id140152273?k=20&m=140152273&s=612x612&w=0&h=f4iGjK6LQyC5s76D3sXSzRoOTOimK_XII_S0qnLWEgg=" alt="" /></div>
+            <div class="slider_slide" data-slider-slide><img width="612" height="459" src="https://media.istockphoto.com/photos/beautiful-portrait-of-young-girl-with-flower-in-her-hair-picture-id1178916517?k=20&m=1178916517&s=612x612&w=0&h=9hQK0t6YF1xfJ2-ViJhsXFUseLZOzwSgrkF3bQXL9vA=" data-src="https://media.istockphoto.com/photos/beautiful-portrait-of-young-girl-with-flower-in-her-hair-picture-id1178916517?k=20&m=1178916517&s=612x612&w=0&h=9hQK0t6YF1xfJ2-ViJhsXFUseLZOzwSgrkF3bQXL9vA=" alt="" /></div>
+            <div class="slider_slide" data-slider-slide><img width="612" height="459" src="https://media.istockphoto.com/photos/young-beautiful-model-with-long-wavy-well-groomed-hair-picture-id1062396968?k=20&m=1062396968&s=612x612&w=0&h=46B5nByLQnGs9feBRBLjTWUk6MHOELirsbcd5UU0Q2o=" data-src="https://media.istockphoto.com/photos/young-beautiful-model-with-long-wavy-well-groomed-hair-picture-id1062396968?k=20&m=1062396968&s=612x612&w=0&h=46B5nByLQnGs9feBRBLjTWUk6MHOELirsbcd5UU0Q2o=" alt="" /></div>
+          </div>
+        </div>
+        <div class="outro" data-outro>
+          <ul class="outro_list">
+            <li data-outro-media="1"><span><em class="text-1"></em> <em class="text-2">If you could create</em></span><span> <em class="text-3"></em></span></li>
+            <li data-outro-media="2"><span><em class="text-2">any</em> <em class="text-1">job</em></span><span>77777 <em class="text-3">88888</em></span></li>
+            <li data-outro-media="3"><span><em class="text-1">what would it</em> <em class="text-2">be?</em></span><span>Printing <em class="text-3">Typesetting</em></span></li>
+          </ul>
+          <div class="outro_medias" data-outro-medias aria-hidden="true">
+            <img data-outro-image="1" data-src="https://media.istockphoto.com/photos/funky-young-girl-picture-id1224048781?k=20&m=1224048781&s=612x612&w=0&h=1FMoAEbr_W4yjG4YWRDIsNw6sd7g1dpDwn88lH-WoF8=" height="339" width="509" src="https://media.istockphoto.com/photos/funky-young-girl-picture-id1224048781?k=20&m=1224048781&s=612x612&w=0&h=1FMoAEbr_W4yjG4YWRDIsNw6sd7g1dpDwn88lH-WoF8=" alt="">
+            <img data-outro-image="2" data-src="https://media.istockphoto.com/photos/brown-haired-woman-with-voluminous-hairstyle-picture-id1145508108?k=20&m=1145508108&s=612x612&w=0&h=y1C_y1gFjfA-o7ITHK2VHErerJwqIUdsyspU6bOZOmU=" height="459" width="612" src="https://media.istockphoto.com/photos/brown-haired-woman-with-voluminous-hairstyle-picture-id1145508108?k=20&m=1145508108&s=612x612&w=0&h=y1C_y1gFjfA-o7ITHK2VHErerJwqIUdsyspU6bOZOmU=" alt="">
+            <img data-outro-image="3" data-src="https://media.istockphoto.com/photos/beautiful-young-girl-picture-id140152273?k=20&m=140152273&s=612x612&w=0&h=f4iGjK6LQyC5s76D3sXSzRoOTOimK_XII_S0qnLWEgg=" height="459" width="612" src="https://media.istockphoto.com/photos/beautiful-young-girl-picture-id140152273?k=20&m=140152273&s=612x612&w=0&h=f4iGjK6LQyC5s76D3sXSzRoOTOimK_XII_S0qnLWEgg=" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="scroll" data-scroll></div>
+    </div>
+
+<script>
+  class Sketch {
+
+  constructor() {
+    this.onResize = this.onResize.bind(this)
+    this.onScroll = this.onScroll.bind(this)
+    this.content = document.querySelector('[data-content]') || false
+    this.scroll = document.querySelector('[data-scroll]') || false
+    this.hero = document.querySelector('[data-hero]') || false
+    this.heroTitle = document.querySelector('[data-hero-title]') || false
+    this.heroImage = document.querySelector('[data-hero-image]') || false
+    this.heroBorder = document.querySelector('[data-hero-border]') || false
+    this.intro = document.querySelector('[data-intro]') || false
+    this.introTitle = document.querySelector('[data-intro-title]') || false
+    this.introText = document.querySelector('[data-intro-text]') || false
+    this.introFigure1 = document.querySelector('[data-intro-figure="1"]') || false
+    this.introFigure2 = document.querySelector('[data-intro-figure="2"]') || false
+    this.introFigure3 = document.querySelector('[data-intro-figure="3"]') || false
+    this.introFigure4 = document.querySelector('[data-intro-figure="4"]') || false
+    this.layer = document.querySelector('[data-layer]') || false
+    this.layerText = document.querySelector('[data-layer-text]') || false
+    this.slider = document.querySelector('[data-slider]') || false
+    this.sliderInner = document.querySelector('[data-slider-inner]') || false
+    this.sliderSlides = document.querySelectorAll('[data-slider-slide]') || false
+    this.outro = document.querySelector('[data-outro]') || false
+    this.outroMedia = document.querySelectorAll('[data-outro-media]') || false
+    this.outroMedias = document.querySelector('[data-outro-medias]') || false
+    this.scrollTop = 0
+    this.windowWidth = 0
+    this.easedScrollTop = 0
+    this.heroHeight = 0
+    this.heroTitleTop = 0
+    this.heroTitleHeight = 0
+    this.introStart = 0
+    this.introEnd = 0
+    this.introHeight = 0
+    this.introTitleTop = 0
+    this.introTitleHeight = 0
+    this.introTextTop = 0
+    this.introTextHeight = 0
+    this.layerTop = 0
+    this.layerHeight = 0
+    this.layerTextTop = 0
+    this.layerTextHeight = 0
+    this.sliderTop = 0
+    this.sliderInnerWidth = 0
+    this.outroMediasWidth = 0
+    this.outroMediasHeight = 0
+    this.current = 0
+    this.skewX = 0
+    this.rotate = 0
+    this.distX = 0
+    this.distY = 0
+    this.mousePos = {
+      x: 0,
+      y: 0
+    }
+    this.cursorPos = {
+      x: 0,
+      y: 0
+    }
+
+    let _this = this
+
+    this.init()
+  }
+
+  init() {
+    this.event()
+    this.onResize()
+    this.update()
+  }
+
+  event() {
+    window.addEventListener('resize', this.onResize, false)
+    document.addEventListener('scroll', this.onScroll, false)
+    this.outro.addEventListener('mousemove', this.onMove.bind(this), false)
+    for(const media of this.outroMedia) {
+      media.addEventListener('mouseenter', this.onEnter, false)
+    }
+  }
+
+  update() {
+    requestAnimationFrame(this.update.bind(this))
+
+    this.easedScrollTop += (this.scrollTop - this.easedScrollTop) * 0.5
+    // console.log(this.easedScrollTop)
+
+    if (this.easedScrollTop < 0.01) {
+      this.easedScrollTop = 0;
+    }
+
+    this.setTransform(this.content, 'translateY('+(this.easedScrollTop * -1)+'px) translateZ(0)')
+
+    const heroSequence = this.clamp(0, 1, this.easedScrollTop / this.heroHeight)
+    const heroBorder = (heroSequence * 200) + 1
+    const heroScale = (heroSequence * 0.1) + 1
+    const heroTransformY = (heroSequence * 300)
+
+    this.heroBorder.style.borderWidth = heroBorder+'px'
+    this.setTransform(this.heroImage, 'scale('+heroScale+') translateY('+heroTransformY+'px) translateZ(0)')
+
+    if(this.easedScrollTop > (this.heroTitleTop + this.heroTitleHeight)) {
+      this.heroTitle.classList.remove('active')
+    } else {
+      this.heroTitle.classList.add('active')
+    }
+
+    const introSequence = this.clamp(0, 1, (this.easedScrollTop - this.introStart) / this.introEnd)
+    const introTransformY1 = introSequence * this.introEnd * 0.1
+    const introTransformY2 = introSequence * this.introEnd * 0.2
+    const introTransformY3 = introSequence * this.introEnd * 0.25
+    const introTransformY4 = introSequence * this.introEnd * 0.3
+
+    this.setTransform(this.introFigure1, 'translateY('+introTransformY1+'px) translateZ(0)')
+    this.setTransform(this.introFigure2, 'translateY('+(introTransformY2 * -1)+'px) translateZ(0)')
+    this.setTransform(this.introFigure3, 'translateY('+(introTransformY3 * -1)+'px) translateZ(0)')
+    this.setTransform(this.introFigure4, 'translateY('+introTransformY4+'px) translateZ(0)')
+
+    if(
+      this.easedScrollTop > (this.introTitleTop - this.heroHeight) &&
+      this.easedScrollTop < (this.introTitleTop + this.introTitleHeight)
+    ) {
+      this.introTitle.classList.add('active')
+    } else {
+      this.introTitle.classList.remove('active')
+    }
+
+    if(
+      this.easedScrollTop > (this.introTextTop - this.heroHeight) &&
+      this.easedScrollTop < (this.introTextTop + this.introTextHeight)
+    ) {
+      this.introText.classList.add('active')
+    } else {
+      this.introText.classList.remove('active')
+    }
+
+    if(
+      this.easedScrollTop > (this.layerTextTop - this.introHeight) &&
+      this.easedScrollTop < (this.layerTextTop + this.layerTextHeight)
+    ) {
+      this.layer.classList.add('active')
+    } else {
+      this.layer.classList.remove('active')
+    }
+
+    const sliderSequence = this.clamp(0, 1, (this.easedScrollTop - this.sliderTop) / (this.windowWidth * 2))
+    const sliderTransformY = sliderSequence * (this.windowWidth * 2)
+
+    this.setTransform(this.slider, 'translateY('+(sliderTransformY)+'px) translateZ(0)')
+    this.setTransform(this.sliderInner, 'translateX('+(-sliderTransformY)+'px) translateZ(0)')
+
+    this.current = this.lerp(this.current, this.scrollTop, 0.08)
+    this.current = parseFloat(this.current.toFixed(2))
+    this.skewX = (this.scrollTop - this.current) * 0.01
+
+    for(const slide of this.sliderSlides) {
+      if(
+        this.easedScrollTop > this.sliderTop &&
+        this.easedScrollTop < (this.sliderTop + (this.windowWidth * 2))
+      ) {
+        this.setTransform(slide, 'skewX('+this.skewX+'deg)')
+      } else {
+        this.setTransform(slide, 'skewX(0deg)')
+      }
+    }
+
+    this.follow()
+  }
+
+  setTransform(el, value) {
+    el.style.mozTransform = value
+    el.style.webkitTransform = value
+    el.style.transform = value
+  }
+
+  getPos(node, scope) {
+    const root = scope || document
+    let offsetTop = node.offsetTop
+    while (node && node.offsetParent && node.offsetParent !== document && node !== root && root !== node.offsetParent) {
+      offsetTop += node.offsetParent.offsetTop
+      node = node.offsetParent
+    }
+    return {
+      top: offsetTop
+    }
+  }
+
+  clamp(min, max, value) {
+    return Math.min(Math.max(value, min), max)
+  }
+
+  lerp(start, end, time) {
+    return start * (1 - time) + end * time
+  }
+
+  onResize() {
+    this.scroll.style.height = this.content.clientHeight+'px'
+    this.heroHeight = this.hero.clientHeight
+
+    this.windowWidth = window.innerWidth
+
+    const heroTitleOffset = this.getPos(this.heroTitle)
+    this.heroTitleTop = heroTitleOffset.top
+    this.heroTitleHeight = this.heroTitle.clientHeight
+
+    const introOffset = this.getPos(this.intro)
+    this.introStart = introOffset.top - this.heroHeight
+    this.introEnd = this.intro.clientHeight + this.heroHeight
+
+    const introTitleOffset = this.getPos(this.introTitle)
+    this.introTitleTop = introTitleOffset.top
+    this.introTitleHeight = this.introTitle.clientHeight
+
+    this.introHeight = this.intro.clientHeight
+
+    const introTextOffset = this.getPos(this.introText)
+    this.introTextTop = introTextOffset.top
+    this.introTextHeight = this.introText.clientHeight
+
+    const layerOffest = this.getPos(this.layer)
+    this.layerTop = layerOffest.top
+    this.layerHeight = this.layer.clientHeight
+
+    const layerTextOffest = this.getPos(this.layerText)
+    this.layerTextTop = layerTextOffest.top
+    this.layerTextHeight = this.layerText.clientHeight
+
+    const sliderOffest = this.getPos(this.slider)
+    this.sliderTop = sliderOffest.top
+
+    this.outroMediasHeight = (this.outroMedias.clientHeight / 2)
+    this.outroMediasWidth = (this.outroMedias.clientWidth / 2)
+  }
+
+  onScroll() {
+    this.scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  }
+
+  onEnter(e) {
+    let target = e.currentTarget.dataset.outroMedia
+    for(const image of document.querySelectorAll('[data-outro-image]')) {
+      if(image.classList.contains('active')) {
+        image.classList.remove('active')
+      }
+      if(image.dataset.outroImage === target) {
+        image.classList.add('active')
+      }
+    }
+  }
+
+  onMove(e) {
+    this.mousePos.x = e.pageX
+    this.mousePos.y = e.pageY - this.scrollTop
+  }
+
+  follow() {
+    this.distX = this.mousePos.x - this.cursorPos.x
+    this.distY = this.mousePos.y - this.cursorPos.y
+
+    this.cursorPos.x += this.distX
+    this.cursorPos.y += this.distY
+
+    this.rotate = ((this.windowWidth / 2) >= this.mousePos.x) ? -5 : 5
+
+    this.outroMedias.style.left = (this.cursorPos.x - this.outroMediasWidth) + 'px'
+    this.outroMedias.style.top = (this.cursorPos.y - this.outroMediasHeight) + 'px'
+    this.setTransform(this.outroMedias, 'rotate('+this.rotate+'deg)')
+  }
+}
+
+const sketch = new Sketch()
+
+</script>
+  </body>
+</html>

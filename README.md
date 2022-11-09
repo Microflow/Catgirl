@@ -16,6 +16,8 @@
 
 ### Once you're happy with the site, deploy it on Vercel using the Vercel dashboard, or [Vercel Deploy](https://chrome.google.com/webstore/detail/vercel-deploy/nkignhibadhmcbiiilleogljodcaonjk/related)
 
+[Guide to Vercel Deploy](https://www.youtube.com/watch?v=zRJcQ9PFSHE)
+
 
 
 

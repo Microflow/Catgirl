@@ -4,9 +4,39 @@ https://www1.udel.edu/History-old/figal/Hist104/assets/pdf/readings/18sunyatsen.
 
 https://archive.org/stream/drsunyatsenhisli00sunyuoft/drsunyatsenhisli00sunyuoft_djvu.txt
 
+I will give a short quote here:
+
 I therefore propose a plan for the organisation of a new market in China, sufficiently 
 extensive both to develop China's productive forces and to absorb the industrial capacity of the foreign Powers. The 
 plan I propose is as follows : 
+
+(SUMMARY)
+
+I. Development of Communication Systems 
+
+a. Railroad — 100,000 miles 
+
+b. Macadam roads— 1,000,000 miles 
+
+c. Improvement of existing canal and construction of 
+new canals 
+
+d. River conservancy 
+
+e. Construction of more telegraph lines, telephone and 
+wireless systems 
+
+II. Development of Commercial Harbors 
+
+III. Water Power and Irrigation Development 
+
+IV. Mineral and Heavy Industrisl Development 
+
+V. Agricultural Development and Reforestation 
+
+VI. Immigration to Bordering Provinces 
+
+~O~
 
 1. The development of systems of communication : 
 
@@ -31,9 +61,11 @@ the river Yangtse, from Hankow to
 the sea, in order to permit of ocean- 
 going vessels reaching Hankow. 
 
+~O~
+
 I found his thinking to be very lucid and clear.
 
-100 years later. We have a different landscape. In my small way, I have tried to copy his framework, and make 5 proposals for 2022. 
+100 years later, we have a different landscape to negotiate. In my small way, I have tried to copy his framework, and make 5 proposals for 2022. 
 
 We now have all the railroad and canals we need.
 
@@ -67,6 +99,10 @@ I propose
 5 - We build new, villages towns and cities. 
 
 These are not empty proposals. The infrastructure is already being built now. Commerical units are available. Also, many people are using ingenuity to find solutions. 
+
+By 2025, I hope to...
+
+
 
 Pioneers in these inudsties may be able to make money. 
 

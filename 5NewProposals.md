@@ -1,10 +1,26 @@
 In X, Dr Sun Yatsen made 5 proposals for modern China. 
 
+https://www1.udel.edu/History-old/figal/Hist104/assets/pdf/readings/18sunyatsen.pdf
+
+I found his thinking to be very lucid and clear.
+
 In my small way, I have tried to copy his framework, and make 5 proposals for 2022. 
 
 Successes...
 
-We are half way to a civilization
+We are half way to a civilization. Look around, at the triumphs of engineering.
+
+- We have hot water, and heating for the winter. 
+- We have communication networks, staffed by competent engineers. 
+- We can obtain and herb ir medicine in our local shop. 
+
+Truly, there are many triumphs. But where shall we go from here?
+
+
+Before listening to these proposals, bear in mind two things:
+
+1) This is not empty, hot air, these networks are already being made by . X industry xxx.
+2) This has nothing to do with politics. This is about engineering, which goes beyond politics. 
 
 I propose
 
